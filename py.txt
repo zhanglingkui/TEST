@@ -1,0 +1,25 @@
+import argparse
+parser = argparse.ArgumentParser(description='finding SNP')
+parser.add_argument('-input', type=argparse.FileType('r'),help='input vcf file')
+parser.add_argument('-chr', type=str,help='chromosome')
+parser.add_argument('-p1', type=int,help='start position')
+parser.add_argument('-p2', type=int,help='stop position')
+parser.add_argument('-output', type=argparse.FileType('w'),help='output the result')
+args = parser.parse_args()
+
+vcffile = args.input
+lines = vcffile.readlines()
+snpfile = args.output
+
+chromosome = args.chr
+start = args.p1
+stop = args.p2
+
+for line in lines:
+        if line[0] != '#':
+                content = line.strip().split('\t')
+                if content[0] == chromosome:
+                        if int(content[1]) in range(start,stop):
+                                snpfile.write(line)
+args.input.close()
+args.output.close()
